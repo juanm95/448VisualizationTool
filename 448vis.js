@@ -1,0 +1,189 @@
+var filters;
+d3.json("./scpd_incidents 3.json", function (error, data) {
+    // This function gets called when the request is resolved (either failed or succeeded)
+    if (error) {
+        // Handle error if there is any
+        return console.warn(error);
+    }
+    // If there is no error, then data is actually ready to use
+    visualize(data, filters);
+    console.log(data);
+});
+
+// Set up size
+var width = 750
+    , height = width;
+
+// Set up projection that map is using
+var projection = d3.geo.mercator()
+    .center([-122.433701, 37.767683]) // San Francisco, roughly
+    .scale(225000)
+    .translate([width / 2, height / 2]);
+
+
+
+// This is the mapping between <longitude, latitude> position to <x, y> pixel position on the map
+// projection([lon, lat]) returns [x, y]
+
+// Add an svg element to the DOM
+var svg = d3.select("#svg-col").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    //    .on("click", click);
+
+// Add svg map at correct size, assumes map is saved in a subdirectory called "data"
+svg.append("image")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("xlink:href", "./sfmap.svg");
+
+var dragMarker = d3.behavior.drag()
+    .on("drag", dragMove)
+    .on("dragstart", dragStart)
+    .on("dragend", dragEnd);
+
+function dragMove(d) {
+    console.log("dragging");
+    var x = d3.event.x
+        , y = d3.event.y;
+    d3.select(this)
+        .attr("transform", "translate(" + x + "," + y + ")");
+}
+
+function dragStart(d) {
+    console.log("dragstart");
+}
+
+function dragEnd(d) {
+    console.log("dragend");
+}
+// Add the home and work markers
+var rectWidth = 30
+var rectHeight = 30
+var homeStart = "translate(300, 300)"
+var workStart = "translate(450, 230)"
+var circleStartRadius = 100
+
+
+//visualize data function
+function visualize(data, filters) {
+
+    var filtered_data;
+    home = svg.append("g")
+        .attr("transform", function (d) {
+            return homeStart
+        })
+        .call(dragMarker)
+    home.append("circle")
+        .attr("r", circleStartRadius)
+        .attr("fill-opacity", ".2")
+        .attr("stroke-width", "3")
+        .attr("stroke", "rgb(0, 0, 0)")
+    home.append("rect")
+        .attr("y", function (d) {
+            return (-rectHeight / 2)
+        })
+        .attr("x", function (d) {
+            return (-rectWidth / 2)
+        })
+        .attr("width", rectWidth)
+        .attr("height", rectHeight)
+        .attr("fill-opacity", "0")
+        .attr("stroke-width", "3")
+        .attr("stroke", "rgb(0, 0, 0)")
+    home.append("text")
+        .text("A")
+        .attr("text-anchor", "middle")
+        .attr("alignment-baseline", "middle")
+        .style("-webkit-user-select", "none")
+
+    work = svg.append("g")
+        .attr("transform", function (d) {
+            return workStart
+        })
+        .call(dragMarker)
+    work.append("circle")
+        .attr("r", circleStartRadius)
+        .attr("fill-opacity", ".2")
+        .attr("stroke-width", "3")
+        .attr("stroke", "rgb(0, 0, 0)")
+    work.append("rect")
+        .attr("y", function (d) {
+            return (-rectHeight / 2)
+        })
+        .attr("x", function (d) {
+            return (-rectWidth / 2)
+        })
+        .attr("width", rectWidth)
+        .attr("height", rectHeight)
+        .attr("fill-opacity", "0")
+        .attr("stroke-width", "3")
+        .attr("stroke", "rgb(0, 0, 0)")
+
+    work.append("text")
+        .text("B")
+        .attr("text-anchor", "middle")
+        .attr("alignment-baseline", "middle")
+        .style("-webkit-user-select", "none")
+
+    var circles = d3.select("svg")
+        .selectAll("circle.dataPoint")
+        .data(data.data)
+
+    circles.exit().remove();
+
+    //new elements
+    circles.enter().append("circle")
+        .filter(dataPointFilter)
+        .attr("class", "dataPoint")
+        .attr("cx", function (d) {
+            return projection(d.Location)[0];
+        })
+        .attr("cy", function (d) {
+            return projection(d.Location)[1];
+        })
+        .attr("r", function (d) {
+            return 10;
+        });
+}
+//click function
+function click() {
+    //ignore the click event if suppressed
+    if (d3.event.defaultPrevented) {
+        return
+    }
+
+    //extract the click location
+    var point = d3.mouse(this);
+    var p = {
+        x: point[0]
+        , y: point[1]
+    };
+    //append a new point
+    svg.append("circle")
+        .attr("cx", p.x)
+        .attr("cy", p.y)
+        .attr("r", "20px")
+        .attr("class", "dot");
+}
+
+function dataPointFilter(d) {
+    return isInIntersection(d)
+}
+
+function isInIntersection(d) {
+    return dpIsInRadius(d, window.home) && dpIsInRadius(d, window.work)
+}
+
+function dpIsInRadius(d, marker) {
+    if (d.IncidentNumber === "130190030") {
+        var projectedCoords = projection(d.Location)
+        console.log(getCoordsFromMarker(marker))
+        return true
+    }
+    return false
+}
+
+function getCoordsFromMarker(marker) {
+    console.log(marker)
+}
