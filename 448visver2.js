@@ -12,6 +12,7 @@ d3.json("./scpd_incidents 3.json", function (error, data) {
 });
 document.addEventListener("click", function () {
     console.log(document.getElementById("violent").value)
+    console.log(document.querySelectorAll(':checked'))
     document.getElementById("nonviolent").value;
 })
 // Set up size
@@ -130,8 +131,6 @@ function markerInit() {
         .style("-webkit-user-select", "none")
 }
 
-function
-
 //visualize data function
 function visualize(data, filters) {
 
@@ -145,7 +144,13 @@ function visualize(data, filters) {
 
     //new elements
     circles.enter().append("circle")
-        .filter(dataPointFilter)
+        .filter(function(d) {
+            return d.DayOfWeek === "Monday"
+        })
+        .filter(function(d) {
+            console.log(d)
+            return d.Resolution === "NONE"
+        })
         .attr("class", "dataPoint")
         .attr("cx", function (d) {
             return projection(d.Location)[0];
@@ -178,6 +183,17 @@ function click() {
 }
 
 function dataPointFilter(d) {
+    console.log(d)
+    if (dataFilter.violent &&  dataIsViolent(d)) {
+        if (dataPoint.resolved && dataIsResolved(d)) {
+            return true
+        }
+    }
+    if (dataFilter.nonviolent &&  !dataIsViolent(d)) {
+        if (dataPoint.resolved && dataIsResolved(d)) {
+            return true
+        }
+    }
     return isInIntersection(d)
 }
 
@@ -187,7 +203,7 @@ function isInIntersection(d) {
 
 function dpIsInRadius(d, marker) {
     if (d.IncidentNumber === "130190030") {
-        console.log(marker)
+        // console.log(marker)
         var projectedCoords = projection(d.Location)
         return true
     }
