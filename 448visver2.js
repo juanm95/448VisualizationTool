@@ -155,7 +155,6 @@ function click() {
     if (d3.event.defaultPrevented) {
         return
     }
-
     //extract the click location
     var point = d3.mouse(this);
     var p = {
