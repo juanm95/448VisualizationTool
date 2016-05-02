@@ -2,11 +2,6 @@ var category = {"ARSON":"violent", "ASSAULT":"violent", "BURGLARY":"violent", "D
 var filters = new Set();
 var selectedFilters = document.querySelectorAll(':checked')
 addSelectedFiltersToFilterSet(selectedFilters)
-function addSelectedFiltersToFilterSet(selectedFilters) {
-    for (var i = 0; i < selectedFilters.length; ++i) {
-        filters.add(selectedFilters[i].id)  // Calling myNodeList.item(i) isn't necessary in JavaScript
-    }
-}
 d3.json("./scpd_incidents 3.json", function (error, data) {
     // This function gets called when the request is resolved (either failed or succeeded)
     if (error) {
@@ -18,11 +13,15 @@ d3.json("./scpd_incidents 3.json", function (error, data) {
     visualize(data, filters);
     console.log(data);
 });
+function addSelectedFiltersToFilterSet(selectedFilters) {
+    filters = new Set();
+    for (var i = 0; i < selectedFilters.length; ++i) {
+        filters.add(selectedFilters[i].id)  // Calling myNodeList.item(i) isn't necessary in JavaScript
+    }
+}
 document.addEventListener("click", function () {
-    console.log(document.getElementById("violent").value)
-    console.log(document.querySelectorAll(':checked'))
-    filters = document.querySelectorAll(':checked')
-    document.getElementById("nonviolent").value;
+    var selectedFilters = document.querySelectorAll(':checked')
+    addSelectedFiltersToFilterSet(selectedFilters)
 })
 // Set up size
 var width = 750
@@ -149,47 +148,50 @@ function visualize(data, filters) {
         .selectAll("circle.dataPoint")
         .data(data.data)
         .filter(function(d) {
-            if (!filter.has("violent")) {
+            if (filter.has("violent")) {
                 return dataIsViolent(d)
             }
-            return true
-        })
-        .filter(function(d) {
-            if (!filter.has("nonviolent")) {
-                return !dataIsViolent(d)
+            if (filter.has("nonviolent")) {
+                return true
             }
-            return true
+            return false
         })
-        .filter(function(d) {
-            if (!filter.has("resolved")) {
-                return dataIsResolved(d)
-            }
-            return true
-        })
-        .filter(function(d) {
-            if (!filter.has("notresolved")) {
-                return !dataIsResolved(d)
-            }
-            return true
-        })
-        .filter(function(d) {
-            if (!filter.has("dusk")) {
-                return dataIsViolent(d)
-            }
-            return true
-        })
-        .filter(function(d) {
-            if (!filter.has("day")) {
-                return !dataIsViolent(d)
-            }
-            return true
-        })
-        .filter(function(d) {
-            if (!filter.has("evening")) {
-                return !dataIsViolent(d)
-            }
-            returntrue
-        })
+        // .filter(function(d) {
+        //     if (!filter.has("nonviolent")) {
+        //         return !dataIsViolent(d)
+        //     }
+        //     return true
+        // })
+        // .filter(function(d) {
+        //     if (!filter.has("resolved")) {
+        //         return dataIsResolved(d)
+        //     }
+        //     return true
+        // })
+        // .filter(function(d) {
+        //     if (!filter.has("notresolved")) {
+        //         return !dataIsResolved(d)
+        //     }
+        //     return true
+        // })
+        // .filter(function(d) {
+        //     if (!filter.has("dusk")) {
+        //         return dataIsViolent(d)
+        //     }
+        //     return true
+        // })
+        // .filter(function(d) {
+        //     if (!filter.has("day")) {
+        //         return !dataIsViolent(d)
+        //     }
+        //     return true
+        // })
+        // .filter(function(d) {
+        //     if (!filter.has("evening")) {
+        //         return !dataIsViolent(d)
+        //     }
+        //     returntrue
+        // })
 
     circles.exit().remove();
 
