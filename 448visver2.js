@@ -2,6 +2,21 @@ var category = {"ARSON":"violent", "ASSAULT":"violent", "BURGLARY":"violent", "D
 var filters = new Set();
 var selectedFilters = document.querySelectorAll(':checked')
 addSelectedFiltersToFilterSet(selectedFilters)
+
+function addSelectedFiltersToFilterSet(selectedFilters) {
+    for (var i = 0; i < selectedFilters.length; ++i) {
+        filters.add(selectedFilters[i].id)  // Calling myNodeList.item(i) isn't necessary in JavaScript
+    }
+}
+
+function dataIsViolent(d){
+    //get category
+    var currCategory = d.Category;
+    //get violent status
+    var state = category[currCategory];
+    return (state==="violent");
+}
+
 d3.json("./scpd_incidents 3.json", function (error, data) {
     // This function gets called when the request is resolved (either failed or succeeded)
     if (error) {
