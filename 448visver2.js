@@ -1,13 +1,14 @@
 var category = {"ARSON":"violent", "ASSAULT":"violent", "BURGLARY":"violent", "DISORDERLY CONDUCT":"violent", "DRIVING UNDER THE INFLUENCE":"violent", "DRUG/NARCOTIC":"nonviolent", "DRUNKENNESS":"violent", "EXTORTION":"nonviolent", "FAMILY OFFENSES":"violent", "FORGERY/COUNTERFEITING":"violent", "FRAUD":"nonviolent", "KIDNAPPING":"violent", "LARCENY/THEFT":"violent", "LIQUOR LAWS":"nonviolent", "LOITERING":"nonviolent", "MISSING PERSON":"violent", "NON-CRIMINAL":"nonviolent", "OTHER OFFENSES":"nonviolent", "SEX OFFENSES, FORCIBLE":"violent", "ROBBERY":"violent", "SECONDARY CODES":"nonviolent", "STOLEN PROPERTY":"violent", "SUICIDE":"violent", "SUSPICIOUS OCC":"nonviolent", "TRESPASS":"violent", "VANDALISM":"violent", "VEHICLE THEFT":"violent", "WARRANTS":"nonviolent", "WEAPON LAWS":"violent"};
 var filters = new Set();
 var selectedFilters = document.querySelectorAll(':checked')
-addSelectedFiltersToFilterSet(selectedFilters)
-
+var globalData;
 function addSelectedFiltersToFilterSet(selectedFilters) {
+    filters = new Set();
     for (var i = 0; i < selectedFilters.length; ++i) {
         filters.add(selectedFilters[i].id)  // Calling myNodeList.item(i) isn't necessary in JavaScript
     }
 }
+addSelectedFiltersToFilterSet(selectedFilters);
 
 function dataIsViolent(d){
     //get category
@@ -25,18 +26,14 @@ d3.json("./scpd_incidents 3.json", function (error, data) {
     }
     // If there is no error, then data is actually ready to use
     // initialize(data)
+    globalData = data
     visualize(data, filters);
-    console.log(data);
 });
-function addSelectedFiltersToFilterSet(selectedFilters) {
-    filters = new Set();
-    for (var i = 0; i < selectedFilters.length; ++i) {
-        filters.add(selectedFilters[i].id)  // Calling myNodeList.item(i) isn't necessary in JavaScript
-    }
-}
+
 document.addEventListener("click", function () {
     var selectedFilters = document.querySelectorAll(':checked')
     addSelectedFiltersToFilterSet(selectedFilters)
+    visualize(globalData, filters)
 })
 // Set up size
 var width = 750
@@ -71,7 +68,6 @@ var dragMarker = d3.behavior.drag()
     .on("dragend", dragEnd);
 
 function dragMove(d) {
-    console.log("dragging");
     var x = d3.event.x
         , y = d3.event.y;
     d3.select(this)
@@ -82,11 +78,9 @@ function dragMove(d) {
 }
 
 function dragStart(d) {
-    console.log("dragstart");
 }
 
 function dragEnd(d) {
-    console.log("dragend");
 }
 // Add the home and work markers
 var rectWidth = 30
@@ -156,21 +150,37 @@ function markerInit() {
 
 //visualize data function
 function visualize(data, filters) {
+    console.log(data)
 
-    var filtered_data;
-
+    var filtered_data = data.data.filter(function(d) {
+            var retVal = false
+            if (filters.has("violent")) {
+                retVal = dataIsViolent(d)
+            }
+            if (!retVal && filters.has("nonviolent")) {
+                retVal = !dataIsViolent(d)
+            }
+            return retVal
+        });
+    console.log(filtered_data)
     var circles = d3.select("svg")
         .selectAll("circle.dataPoint")
-        .data(data.data)
-        .filter(function(d) {
-            if (filter.has("violent")) {
-                return dataIsViolent(d)
-            }
-            if (filter.has("nonviolent")) {
-                return true
-            }
-            return false
+        .data(filtered_data);
+        //new elements
+    circles.exit().remove();
+    circles.enter()
+    .append("circle")
+        .attr("class", "dataPoint")
+        .attr("cx", function (d) {
+            return projection(d.Location)[0];
         })
+        .attr("cy", function (d) {
+            return projection(d.Location)[1];
+        })
+        .attr("r", function (d) {
+            return 10;
+        });
+
         // .filter(function(d) {
         //     if (!filter.has("nonviolent")) {
         //         return !dataIsViolent(d)
@@ -207,21 +217,6 @@ function visualize(data, filters) {
         //     }
         //     returntrue
         // })
-
-    circles.exit().remove();
-
-    //new elements
-    circles.enter().append("circle")
-        .attr("class", "dataPoint")
-        .attr("cx", function (d) {
-            return projection(d.Location)[0];
-        })
-        .attr("cy", function (d) {
-            return projection(d.Location)[1];
-        })
-        .attr("r", function (d) {
-            return 10;
-        });
 }
 //click function
 function click() {
@@ -244,7 +239,6 @@ function click() {
 }
 
 function dataPointFilter(d) {
-    console.log(d)
     if (dataFilter.violent &&  dataIsViolent(d)) {
         if (dataPoint.resolved && dataIsResolved(d)) {
             return true
@@ -264,7 +258,6 @@ function isInIntersection(d) {
 
 function dpIsInRadius(d, marker) {
     if (d.IncidentNumber === "130190030") {
-        // console.log(marker)
         var projectedCoords = projection(d.Location)
         return true
     }
