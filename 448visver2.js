@@ -6,10 +6,14 @@ d3.json("./scpd_incidents 3.json", function (error, data) {
         return console.warn(error);
     }
     // If there is no error, then data is actually ready to use
+    // initialize(data)
     visualize(data, filters);
     console.log(data);
 });
-
+document.addEventListener("click", function () {
+    console.log(document.getElementById("violent").value)
+    document.getElementById("nonviolent").value;
+})
 // Set up size
 var width = 750
     , height = width;
@@ -67,11 +71,7 @@ var homeStart = "translate(300, 300)"
 var workStart = "translate(450, 230)"
 var circleStartRadius = 100
 
-
-//visualize data function
-function visualize(data, filters) {
-
-    var filtered_data;
+function markerInit() {
     home = svg.append("g")
         .attr("transform", function (d) {
             return homeStart
@@ -128,6 +128,14 @@ function visualize(data, filters) {
         .attr("text-anchor", "middle")
         .attr("alignment-baseline", "middle")
         .style("-webkit-user-select", "none")
+}
+
+function
+
+//visualize data function
+function visualize(data, filters) {
+
+    var filtered_data;
 
     var circles = d3.select("svg")
         .selectAll("circle.dataPoint")
@@ -183,7 +191,7 @@ function dpIsInRadius(d, marker) {
         var projectedCoords = projection(d.Location)
         return true
     }
-    return false
+    return true
 }
 
 function getCoordsFromMarker(marker) {
