@@ -1,0 +1,35 @@
+#parent{
+	display: flex;
+}
+
+#svg-col{
+	flex:1;
+
+}
+
+@font-face {
+    font-family: Avenir;
+    src: url("12-Avenir-Light.ttf") format("opentype");
+}
+
+#interaction{
+	  width: 400px;
+	  	border-left: 3px solid #bdc3c7;
+	  	padding-left: 30px;
+
+
+}
+
+.labelHeader{
+	font-size: 34px;
+	margin-bottom: 7px;
+	margin-top: 7px;
+	font-weight: bold;
+	font-family: Avenir;
+
+
+}
+span{
+	font-family: Avenir;
+	font-size: 20px;
+}

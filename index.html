@@ -1,18 +1,58 @@
 <html>
 
 <head>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<!-- jquery -->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <!-- end of jquery -->
+
 </head>
 
 <body>
-
+	<!--d3 -->
 	<script src="https://d3js.org/d3.v3.min.js"></script>
+	<!--jquery slider -->
+	<script> $(function() {$( ".slider" ).slider();});</script>
 
+<div id="parent">
 	<div id ="svg-col"> 
 		<h2> Map </h2> 
 	</div>
-	<div>
-		interaction
+	<div id="interaction">
+		<div class="labelHeader"> Crime Type </div>
+		 <span> <svg height="25" width="25"> <circle cx="10" cy="15" r="10" fill="#e74c3c" /></svg>
+		 	<span class="label">Violent<input type="checkbox" name="crime" value="Violent"> <br> </span>
+
+		<span> <svg height="25" width="25"> <circle cx="10" cy="15" r="10" fill="#3498db" /></svg>
+			Non-Violent<input type="checkbox" name="crime" value="Non-Violent"> <br> 
+		</span>
+
+
+		<div class="labelHeader"> Resolution </div>
+		 <span> 
+		 	<svg height="25" width="25"> <circle cx="11" cy="14" r="10" stroke="black" stroke-width="2" fill="white" /></svg>
+		 	Resolved<input type="checkbox" name="Resolution" value="Resolved"> <br> </span>
+		<span> 
+			<svg height="25" width="25"> <circle cx="11" cy="14" r="10" stroke="black" stroke-width="2" stroke-dasharray="5,5" fill="white" border-style="dotted" /></svg>
+			Not Resolved<input type="checkbox" name="Resolution" value="Not Resolved"> <br> </span>
+
+		<div class="labelHeader"> Time </div>
+
+		 <span> 12am-8am<input type="checkbox" name="Time" value="12am-8am"> <br> </span>
+		<span> 8am-4pm<input type="checkbox" name="Time" value="8am-4pm"> <br> </span>
+		 <span> 4pm-12am<input type="checkbox" name="Time" value="4pm-12am"> <br> </span>
+
+		<div class="labelHeader"> Home-Radius (A) </div>
+		<div class="slider"></div> 
+
+		<div class="labelHeader"> Work Radius (B) </div>
+		<div class="slider"></div>
+
+
 	</div>
+</div>
 
 	<script src="448vis.js">
 	</script>
