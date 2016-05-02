@@ -1,4 +1,6 @@
 var filters;
+var category = {"ARSON":"violent", "ASSAULT":"violent", "BURGLARY":"violent", "DISORDERLY CONDUCT":"violent", "DRIVING UNDER THE INFLUENCE":"violent", "DRUG/NARCOTIC":"nonviolent", "DRUNKENNESS":"violent", "EXTORTION":"nonviolent", "FAMILY OFFENSES":"violent", "FORGERY/COUNTERFEITING":"violent", "FRAUD":"nonviolent", "KIDNAPPING":"violent", "LARCENY/THEFT":"violent", "LIQUOR LAWS":"nonviolent", "LOITERING":"nonviolent", "MISSING PERSON":"violent", "NON-CRIMINAL":"nonviolent", "OTHER OFFENSES":"nonviolent", "SEX OFFENSES, FORCIBLE":"violent", "ROBBERY":"violent", "SECONDARY CODES":"nonviolent", "STOLEN PROPERTY":"violent", "SUICIDE":"violent", "SUSPICIOUS OCC":"nonviolent", "TRESPASS":"violent", "VANDALISM":"violent", "VEHICLE THEFT":"violent", "WARRANTS":"nonviolent", "WEAPON LAWS":"violent"};
+
 d3.json("./scpd_incidents 3.json", function (error, data) {
     // This function gets called when the request is resolved (either failed or succeeded)
     if (error) {

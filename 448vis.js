@@ -1,4 +1,5 @@
 var filters;
+
 d3.json("./scpd_incidents 3.json", function (error, data) {
     // This function gets called when the request is resolved (either failed or succeeded)
     if (error) {
@@ -72,6 +73,7 @@ var circleStartRadius = 100
 function visualize(data, filters) {
 
     var filtered_data;
+
     home = svg.append("g")
         .attr("transform", function (d) {
             return homeStart
