@@ -1,6 +1,12 @@
-var filters;
 var category = {"ARSON":"violent", "ASSAULT":"violent", "BURGLARY":"violent", "DISORDERLY CONDUCT":"violent", "DRIVING UNDER THE INFLUENCE":"violent", "DRUG/NARCOTIC":"nonviolent", "DRUNKENNESS":"violent", "EXTORTION":"nonviolent", "FAMILY OFFENSES":"violent", "FORGERY/COUNTERFEITING":"violent", "FRAUD":"nonviolent", "KIDNAPPING":"violent", "LARCENY/THEFT":"violent", "LIQUOR LAWS":"nonviolent", "LOITERING":"nonviolent", "MISSING PERSON":"violent", "NON-CRIMINAL":"nonviolent", "OTHER OFFENSES":"nonviolent", "SEX OFFENSES, FORCIBLE":"violent", "ROBBERY":"violent", "SECONDARY CODES":"nonviolent", "STOLEN PROPERTY":"violent", "SUICIDE":"violent", "SUSPICIOUS OCC":"nonviolent", "TRESPASS":"violent", "VANDALISM":"violent", "VEHICLE THEFT":"violent", "WARRANTS":"nonviolent", "WEAPON LAWS":"violent"};
-
+var filters = new Set();
+var selectedFilters = document.querySelectorAll(':checked')
+addSelectedFiltersToFilterSet(selectedFilters)
+function addSelectedFiltersToFilterSet(selectedFilters) {
+    for (var i = 0; i < selectedFilters.length; ++i) {
+        filters.add(selectedFilters[i].id)  // Calling myNodeList.item(i) isn't necessary in JavaScript
+    }
+}
 d3.json("./scpd_incidents 3.json", function (error, data) {
     // This function gets called when the request is resolved (either failed or succeeded)
     if (error) {
@@ -15,6 +21,7 @@ d3.json("./scpd_incidents 3.json", function (error, data) {
 document.addEventListener("click", function () {
     console.log(document.getElementById("violent").value)
     console.log(document.querySelectorAll(':checked'))
+    filters = document.querySelectorAll(':checked')
     document.getElementById("nonviolent").value;
 })
 // Set up size
@@ -141,18 +148,53 @@ function visualize(data, filters) {
     var circles = d3.select("svg")
         .selectAll("circle.dataPoint")
         .data(data.data)
+        .filter(function(d) {
+            if (!filter.has("violent")) {
+                return dataIsViolent(d)
+            }
+            return true
+        })
+        .filter(function(d) {
+            if (!filter.has("nonviolent")) {
+                return !dataIsViolent(d)
+            }
+            return true
+        })
+        .filter(function(d) {
+            if (!filter.has("resolved")) {
+                return dataIsResolved(d)
+            }
+            return true
+        })
+        .filter(function(d) {
+            if (!filter.has("notresolved")) {
+                return !dataIsResolved(d)
+            }
+            return true
+        })
+        .filter(function(d) {
+            if (!filter.has("dusk")) {
+                return dataIsViolent(d)
+            }
+            return true
+        })
+        .filter(function(d) {
+            if (!filter.has("day")) {
+                return !dataIsViolent(d)
+            }
+            return true
+        })
+        .filter(function(d) {
+            if (!filter.has("evening")) {
+                return !dataIsViolent(d)
+            }
+            returntrue
+        })
 
     circles.exit().remove();
 
     //new elements
     circles.enter().append("circle")
-        .filter(function(d) {
-            return d.DayOfWeek === "Monday"
-        })
-        .filter(function(d) {
-            console.log(d)
-            return d.Resolution === "NONE"
-        })
         .attr("class", "dataPoint")
         .attr("cx", function (d) {
             return projection(d.Location)[0];
