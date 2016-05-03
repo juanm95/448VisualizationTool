@@ -51,7 +51,7 @@ var category = {
     , "WEAPON LAWS": "violent"
 };
 /*************** Run ******************************/
-addSelectedFiltersToFilterSet(); >>> >>> > origin / master
+addSelectedFiltersToFilterSet(); 
 d3.json("./scpd_incidents 3.json", function (error, data) {
     // This function gets called when the request is resolved (either failed or succeeded)
     if (error) {
