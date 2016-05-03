@@ -171,7 +171,6 @@ function updateDataPoints(data, filters) {
         if (filters.has("dusk") || filters.has("day") || filters.has("evening")) {
             retVal = dataIsWithinTIme(d)
         }
-       
         return retVal
     });
 
@@ -252,12 +251,12 @@ function dataIsWithinTIme(d) {
         }
     }
     if (filters.has("day")) {
-        if (8<=hour<=15){
+        if (8<=hour && hour<=15){
             return true;
         }
      }
     if (filters.has("evening")) {
-         if (16<=hour<=23){
+         if (16<=hour && hour<=23){
             return true;
         }
     }
