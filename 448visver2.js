@@ -7,7 +7,7 @@ function addSelectedFiltersToFilterSet(selectedFilters) {
         filters.add(selectedFilters[i].id)  // Calling myNodeList.item(i) isn't necessary in JavaScript
     }
 }
-
+//check if crime data point is violent or not
 function dataIsViolent(d){
     //get category
     var currCategory = d.Category;
@@ -15,6 +15,23 @@ function dataIsViolent(d){
     var state = category[currCategory];
     return (state==="violent");
 }
+
+//check if crime data point is resolved or not
+function dataIsResolved(d){
+    //get resolved status
+    var resolvedStatus = d.Resolution;
+    if ("resolvedStatus"==="NONE"){
+        return false;
+    }
+    else{
+        return true;
+    }
+}
+
+
+//check if crime data point fits in time range
+
+function 
 
 d3.json("./scpd_incidents 3.json", function (error, data) {
     // This function gets called when the request is resolved (either failed or succeeded)
