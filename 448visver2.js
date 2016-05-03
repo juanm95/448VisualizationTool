@@ -66,7 +66,7 @@ d3.json("./scpd_incidents 3.json", function (error, data) {
     updateDataPoints(data, filters);
 });
 document.addEventListener("click", function () {
-    addSelectedFiltersToFilterSet(selectedFilters)
+    addSelectedFiltersToFilterSet()
     updateDataPoints(globalData, filters)
 });
 // Set up projection that map is using
@@ -127,8 +127,7 @@ function updateMarkers() {
 }
 
 function updateDataPoints(data, filters) {
-    console.log(data)
-
+    console.log(filters)
     var filtered_data = data.data.filter(function (d) {
         var retVal = false
         if (filters.has("violent")) {
