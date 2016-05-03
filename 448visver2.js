@@ -3,20 +3,27 @@ var filters = new Set();
 // Set up size
 var width = 750
     , height = width;
+var markerSize = 20;
 var globalData;
 var markerData = [
     {
         "name": "home"
-        , "x": 0
-        , "y": 0
+        , "x": 300
+        , "y": 200
         , "r": 50
     }
+
+
+
+
+
+
 
     
     , {
         "name": "work"
-        , "x": 50
-        , "y": 50
+        , "x": 200
+        , "y": 300
         , "r": 50
     }
 ]
@@ -53,7 +60,7 @@ var category = {
     , "WEAPON LAWS": "violent"
 };
 /*************** Run ******************************/
-addSelectedFiltersToFilterSet(); 
+addSelectedFiltersToFilterSet();
 d3.json("./scpd_incidents 3.json", function (error, data) {
     // This function gets called when the request is resolved (either failed or succeeded)
     if (error) {
@@ -94,34 +101,41 @@ updateMarkers();
 /******************** D3 **********************/
 function updateMarkers() {
     var markers = d3.select("svg")
-        .selectAll("rect")
+        .selectAll("g")
         .data(markerData)
-
-    markers.enter()
-        .append("rect")
-        .attr("x", function (d) {
-            return d.x
-        })
-        .attr("y", function (d) {
-            return d.y
-        })
-        .attr("fill", "blue")
-        .attr("width", function (d) {
-            return d.r
-        })
-        .attr("height", function (d) {
+    markers.exit().remove()
+    var newMarkers = markers.enter().append("g")
+    
+    newMarkers.attr("transform", function (d) {
+        return "translate(" + d.x + ", " + d.y + ")"
+    })
+    
+    newMarkers.append("circle")
+        .attr("r", function (d) {
             return d.r
         })
         .attr("fill-opacity", ".2")
-        .call(dragMarker)
-    markers
-        .attr("x", function (d) {
-            return d.x
-        })
+        .attr("stroke-width", "3")
+        .attr("stroke", "rgb(0, 0, 0)")
+
+    newMarkers.append("rect")
+        .attr("width", markerSize)
+        .attr("height", markerSize)
         .attr("y", function (d) {
-            return d.y
+            return (-markerSize / 2)
         })
-        .attr("width", function (d) {
+        .attr("x", function (d) {
+            return (-markerSize / 2)
+        })
+        .attr("fill-opacity", "0")
+        .attr("stroke-width", "3")
+        .attr("stroke", "rgb(0, 0, 0)")
+        .call(dragMarker)
+
+    markers.attr("transform", function (d) {
+        return "translate(" + d.x + ", " + d.y + ")"
+    })
+    markers.select("circle").attr("r", function (d) {
             return d.r
         })
 }
@@ -157,6 +171,7 @@ function updateDataPoints(data, filters) {
         if (filters.has("dusk") || filters.has("day") || filters.has("evening")) {
             retVal = dataIsWithinTIme(d)
         }
+       
         return retVal
     });
 
@@ -174,21 +189,10 @@ function updateDataPoints(data, filters) {
         .selectAll("circle.dataPoint")
         .data(filtered_data);
     //new elements
+
     circles.enter()
         .append("circle")
         .attr("class", "dataPoint")
-                .attr("class", "notresolved")
-
-        .attr("class", function (d) {
-            if (dataIsViolent(d)){
-                return "violent"
-            }
-            else{
-                return "nonviolent";
-            }
-
-        })
-
         .attr("cx", function (d) {
             return projection(d.Location)[0];
         })
@@ -248,12 +252,12 @@ function dataIsWithinTIme(d) {
         }
     }
     if (filters.has("day")) {
-        if (8<=hour && hour<=15){
+        if (8<=hour<=15){
             return true;
         }
      }
     if (filters.has("evening")) {
-         if (16<=hour && hour<=23){
+         if (16<=hour<=23){
             return true;
         }
     }
