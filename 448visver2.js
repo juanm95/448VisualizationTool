@@ -11,7 +11,7 @@ var markerData = [
         , "y": 0
         , "r": 50
     }
-}, {
+    , {
         "name": "work"
         , "x": 50
         , "y": 50
@@ -51,8 +51,7 @@ var category = {
     , "WEAPON LAWS": "violent"
 };
 /*************** Run ******************************/
-addSelectedFiltersToFilterSet();
->>>>>>> origin/master
+addSelectedFiltersToFilterSet(); >>> >>> > origin / master
 d3.json("./scpd_incidents 3.json", function (error, data) {
     // This function gets called when the request is resolved (either failed or succeeded)
     if (error) {
@@ -190,13 +189,12 @@ function dataIsViolent(d) {
 }
 
 //check if crime data point is resolved or not
-function dataIsResolved(d){
+function dataIsResolved(d) {
     //get resolved status
     var resolvedStatus = d.Resolution;
-    if ("resolvedStatus"==="NONE"){
+    if ("resolvedStatus" === "NONE") {
         return false;
-    }
-    else{
+    } else {
         return true;
     }
 }
