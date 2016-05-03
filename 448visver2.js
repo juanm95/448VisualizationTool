@@ -11,6 +11,8 @@ var markerData = [
         , "y": 0
         , "r": 50
     }
+
+    
     , {
         "name": "work"
         , "x": 50
@@ -51,7 +53,7 @@ var category = {
     , "WEAPON LAWS": "violent"
 };
 /*************** Run ******************************/
-addSelectedFiltersToFilterSet(); >>> >>> > origin / master
+addSelectedFiltersToFilterSet();
 d3.json("./scpd_incidents 3.json", function (error, data) {
     // This function gets called when the request is resolved (either failed or succeeded)
     if (error) {
@@ -64,10 +66,10 @@ d3.json("./scpd_incidents 3.json", function (error, data) {
     updateDataPoints(data, filters);
 });
 document.addEventListener("click", function () {
-        addSelectedFiltersToFilterSet(selectedFilters)
-        updateDataPoints(globalData, filters)
-    })
-    // Set up projection that map is using
+    addSelectedFiltersToFilterSet(selectedFilters)
+    updateDataPoints(globalData, filters)
+});
+// Set up projection that map is using
 var projection = d3.geo.mercator()
     .center([-122.433701, 37.767683]) // San Francisco, roughly
     .scale(225000)
