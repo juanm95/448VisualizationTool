@@ -127,7 +127,8 @@ function updateMarkers() {
 }
 
 function updateDataPoints(data, filters) {
-    console.log(filters)
+
+    //violent filtering
     var filtered_data = data.data.filter(function (d) {
         var retVal = false
         if (filters.has("violent")) {
@@ -138,6 +139,30 @@ function updateDataPoints(data, filters) {
         }
         return retVal
     });
+    //resolution filtering
+      filtered_data = filtered_data.filter(function (d) {
+        var retVal = false
+        if (filters.has("resolved")) {
+            retVal = dataIsResolved(d)
+        }
+        if (!retVal && filters.has("notresolved")) {
+            retVal = !dataIsResolved(d)
+        }
+        return retVal
+    });
+
+    //time filtering
+        filtered_data = filtered_data.filter(function (d) {
+        var retVal = false
+        if (filters.has("dusk") || filters.has("day") || filters.has("evening")) {
+            retVal = dataIsWithinTIme(d)
+        }
+       
+        return retVal
+    });
+
+
+
     filtered_data = filtered_data.filter(function (d) {
         for (var i = markerData.length - 1; i >= 0; i--) {
             if (!dataIsInRange(d, markerData[i])) {
@@ -146,7 +171,6 @@ function updateDataPoints(data, filters) {
         }
         return true
     });
-    console.log(filtered_data)
     var circles = d3.select("svg")
         .selectAll("circle.dataPoint")
         .data(filtered_data);
@@ -193,13 +217,38 @@ function dataIsViolent(d) {
 function dataIsResolved(d) {
     //get resolved status
     var resolvedStatus = d.Resolution;
-    if ("resolvedStatus" === "NONE") {
+    if (resolvedStatus === "NONE") {
         return false;
     } else {
         return true;
     }
 }
 
+//check if crime data point is within selected time range or not
+function dataIsWithinTIme(d) {
+     //get crime time 
+     var time = d.Time;
+     //get crime time in hours (0-23)
+     var hour = parseInt(time.substring(0,2));
+    //var crimeTime = d.Date.getHours();
+    if (filters.has("dusk")) {
+        if (hour<=7){
+            return true;
+
+        }
+    }
+    if (filters.has("day")) {
+        if (8<=hour<=15){
+            return true;
+        }
+     }
+    if (filters.has("evening")) {
+         if (16<=hour<=23){
+            return true;
+        }
+    }
+    return false;
+}
 
 
 function dataIsInRange(d, m) {
