@@ -34,5 +34,21 @@ span{
 	font-size: 20px;
 }
 
+.violent{
+	fill: #e74c3c;
 
+}
+
+.nonviolent{
+	fill: #3498db;
+}
+.resolved{
+
+}
+.notresolved{
+	stroke-dasharray: 5,5;
+	  border: 3px solid black;
+
+
+}
 
