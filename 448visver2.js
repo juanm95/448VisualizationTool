@@ -231,10 +231,6 @@ function dragMove(d) {
         , y = d3.event.y;
     d.x += d3.event.dx;
     d.y += d3.event.dy;
-    console.log(d3.event.dx);
-//    d.x = x
-//    d.y = y
-//    console.log(d3.mouse(window.svg[0]))
     updateMarkers()
     updateDataPoints(globalData, filters)
 }
