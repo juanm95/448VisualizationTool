@@ -36,3 +36,23 @@ span{
 
 
 
+.slider {
+    width: 75%;
+    margin: 2em auto;
+}
+
+#homeVal{
+	text-align: center;
+	margin-top: -30px;
+	font-weight: bold;
+}
+
+#workVal{
+	text-align: center;
+	margin-top: -30px;
+		font-weight: bold;
+
+}
+#test{
+	width:100px;
+}

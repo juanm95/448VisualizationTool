@@ -3,28 +3,20 @@ var filters = new Set();
 // Set up size
 var width = 750
     , height = width;
-var markerSize = 20;
+var MARKER_SIZE = 20;
+var CIRCLE_RADIUS = 5;
 var globalData;
 var markerData = [
     {
         "name": "home"
-        , "x": 300
-        , "y": 200
-        , "r": 50
-    }
-
-
-
-
-
-
-
-    
-    , {
+        , "x": 212
+        , "y": 440
+        , "r": 60
+    }, {
         "name": "work"
-        , "x": 200
-        , "y": 300
-        , "r": 50
+        , "x": 336
+        , "y": 350
+        , "r": 60
     }
 ]
 
@@ -71,6 +63,7 @@ d3.json("./scpd_incidents 3.json", function (error, data) {
     // initialize(data)
     globalData = data
     updateDataPoints(data, filters);
+    updateMarkers();
 });
 document.addEventListener("click", function () {
     addSelectedFiltersToFilterSet()
@@ -97,7 +90,6 @@ var dragMarker = d3.behavior.drag()
     .on("drag", dragMove)
     .on("dragstart", dragStart)
     .on("dragend", dragEnd);
-updateMarkers();
 /******************** D3 **********************/
 function updateMarkers() {
     var markers = d3.select("svg")
@@ -105,39 +97,50 @@ function updateMarkers() {
         .data(markerData)
     markers.exit().remove()
     var newMarkers = markers.enter().append("g")
-    
+
+    newMarkers.call(dragMarker)
+
     newMarkers.attr("transform", function (d) {
         return "translate(" + d.x + ", " + d.y + ")"
     })
-    
+
     newMarkers.append("circle")
         .attr("r", function (d) {
             return d.r
         })
-        .attr("fill-opacity", ".2")
-        .attr("stroke-width", "3")
+        .attr("fill-opacity", ".1")
+        .attr("stroke-width", "1")
         .attr("stroke", "rgb(0, 0, 0)")
 
-    newMarkers.append("rect")
-        .attr("width", markerSize)
-        .attr("height", markerSize)
-        .attr("y", function (d) {
-            return (-markerSize / 2)
+    //    newMarkers.append("rect")
+    //        .attr("width", MARKER_SIZE)
+    //        .attr("height", MARKER_SIZE)
+    //        .attr("y", function (d) {
+    //            return (-MARKER_SIZE / 2)
+    //        })
+    //        .attr("x", function (d) {
+    //            return (-MARKER_SIZE / 2)
+    //        })
+    //        .attr("fill-opacity", "0")
+    //        .attr("stroke-width", "3")
+    //        .attr("stroke", "rgb(0, 0, 0)")
+
+    newMarkers.append("text")
+        .text(function (d) {
+            return d.name.toUpperCase().charAt(0)
         })
-        .attr("x", function (d) {
-            return (-markerSize / 2)
-        })
-        .attr("fill-opacity", "0")
-        .attr("stroke-width", "3")
-        .attr("stroke", "rgb(0, 0, 0)")
-        .call(dragMarker)
+        .attr("text-anchor", "middle")
+        .attr("alignment-baseline", "middle")
+        .attr("font-family", "Avenir")
+        .attr("fill", "rgb(36, 143, 36)")
+        .style("-webkit-user-select", "none");
 
     markers.attr("transform", function (d) {
         return "translate(" + d.x + ", " + d.y + ")"
     })
     markers.select("circle").attr("r", function (d) {
-            return d.r
-        })
+        return d.r
+    })
 }
 
 function updateDataPoints(data, filters) {
@@ -154,7 +157,7 @@ function updateDataPoints(data, filters) {
         return retVal
     });
     //resolution filtering
-      filtered_data = filtered_data.filter(function (d) {
+    filtered_data = filtered_data.filter(function (d) {
         var retVal = false
         if (filters.has("resolved")) {
             retVal = dataIsResolved(d)
@@ -166,17 +169,15 @@ function updateDataPoints(data, filters) {
     });
 
     //time filtering
-        filtered_data = filtered_data.filter(function (d) {
+    filtered_data = filtered_data.filter(function (d) {
         var retVal = false
         if (filters.has("dusk") || filters.has("day") || filters.has("evening")) {
             retVal = dataIsWithinTIme(d)
         }
-       
+
         return retVal
     });
-
-
-
+    // proximity filtering
     filtered_data = filtered_data.filter(function (d) {
         for (var i = markerData.length - 1; i >= 0; i--) {
             if (!dataIsInRange(d, markerData[i])) {
@@ -189,10 +190,40 @@ function updateDataPoints(data, filters) {
         .selectAll("circle.dataPoint")
         .data(filtered_data);
     //new elements
+    circles.exit().remove();
 
     circles.enter()
-        .append("circle")
+        .insert("circle", "g") // Circles under markers
+        //        .append("circle") // Circles over markers
         .attr("class", "dataPoint")
+        .attr("fill", function (d) {
+            if (dataIsViolent(d)) {
+                return "#e74c3c";
+            } else {
+                return "#3498db";
+            }
+
+        })
+        .attr("stroke", function (d) {
+            if (dataIsResolved(d)) {
+                return "black";
+            } else {
+                return "#f1c40f";
+            }
+        })
+        .attr("stroke-width", "2px")
+
+    .attr("cx", function (d) {
+            return projection(d.Location)[0];
+        })
+        .attr("cy", function (d) {
+            return projection(d.Location)[1];
+        })
+        .attr("r", function (d) {
+            return CIRCLE_RADIUS;
+        });
+
+    circles
         .attr("cx", function (d) {
             return projection(d.Location)[0];
         })
@@ -200,18 +231,33 @@ function updateDataPoints(data, filters) {
             return projection(d.Location)[1];
         })
         .attr("r", function (d) {
-            return 10;
+            return CIRCLE_RADIUS;
+        })
+        .attr("fill", function (d) {
+            if (dataIsViolent(d)) {
+                return "#e74c3c";
+            } else {
+                return "#3498db";
+            }
+
+        })
+        .attr("stroke", function (d) {
+            if (dataIsResolved(d)) {
+                return "black";
+            } else {
+                return "#f1c40f";
+            }
         });
-    circles.exit().remove();
 }
 /************** INTERACTIONS ***********************/
 function dragMove(d) {
+    d3.event.sourceEvent.stopPropagation();
     var x = d3.event.x
         , y = d3.event.y;
-    d.x = x
-    d.y = y
-    updateMarkers()
+    d.x += d3.event.dx;
+    d.y += d3.event.dy;
     updateDataPoints(globalData, filters)
+    updateMarkers()
 }
 
 function dragStart(d) {}
@@ -240,24 +286,24 @@ function dataIsResolved(d) {
 
 //check if crime data point is within selected time range or not
 function dataIsWithinTIme(d) {
-     //get crime time 
-     var time = d.Time;
-     //get crime time in hours (0-23)
-     var hour = parseInt(time.substring(0,2));
+    //get crime time 
+    var time = d.Time;
+    //get crime time in hours (0-23)
+    var hour = parseInt(time.substring(0, 2));
     //var crimeTime = d.Date.getHours();
     if (filters.has("dusk")) {
-        if (hour<=7){
+        if (hour <= 7) {
             return true;
 
         }
     }
     if (filters.has("day")) {
-        if (8<=hour<=15){
+        if (8 <= hour && hour <= 15) {
             return true;
         }
-     }
+    }
     if (filters.has("evening")) {
-         if (16<=hour<=23){
+        if (16 <= hour && hour <= 23) {
             return true;
         }
     }
@@ -354,11 +400,7 @@ function click() {
         return
     }
     //extract the click location
-    var point = d3.mouse(this);
-    var p = {
-        x: point[0]
-        , y: point[1]
-    };
+
     //append a new point
     svg.append("circle")
         .attr("cx", p.x)

@@ -7,6 +7,8 @@
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   <!-- end of jquery -->
+  <script src="slider.js"></script>
+
 
 </head>
 
@@ -14,11 +16,45 @@
 	<!--d3 -->
 	<script src="https://d3js.org/d3.v3.min.js"></script>
 	<!--jquery slider -->
-	<script> $(function() {$( ".slider" ).slider();});</script>
+	<script> 
+
+
+	$(function() {$( "#homeSlider" ).slider({
+		max:20,
+		min:1,
+		value:8,
+	slide: function(event, ui){
+		var elem = document.getElementById("homeVal");
+		elem.textContent = ui.value + " miles";
+		var pixels = ui.value *12;
+		console.log(pixels);
+		markerData[0].r = pixels;
+
+		updateMarkers()
+    	updateDataPoints(globalData, filters)
+	}
+	});});
+
+	$(function() {$( "#workSlider" ).slider({
+		max:20,
+		min:0,
+		value:8,
+	slide: function(event, ui){
+		var elem = document.getElementById("workVal");
+		elem.textContent = ui.value + " miles";
+		var pixels = ui.value *12;
+		markerData[1].r = pixels;
+	  	updateMarkers()
+    	updateDataPoints(globalData, filters)
+	}
+
+
+	});});
+
+	</script>
 
 <div id="parent">
 	<div id ="svg-col"> 
-		<h2> Map </h2> 
 	</div>
 	<div id="interaction">
 		<div class="labelHeader"> Crime Type </div>
@@ -35,7 +71,7 @@
 		 	<svg height="25" width="25"> <circle cx="11" cy="14" r="10" stroke="black" stroke-width="2" fill="white" /></svg>
 		 	Resolved<input type="checkbox" name="Resolution" value="Resolved" id="resolved" checked="true"> <br> </span>
 		<span> 
-			<svg height="25" width="25"> <circle cx="11" cy="14" r="10" stroke="black" stroke-width="2" stroke-dasharray="5,5" fill="white" border-style="dotted" /></svg>
+			<svg height="25" width="25"> <circle cx="11" cy="14" r="10" stroke="#f1c40f" stroke-width="2" fill="white" /></svg>
 			Not Resolved<input type="checkbox" name="Resolution" value="Not Resolved" id="notresolved" checked="true" checked="true"> <br> </span>
 
 		<div class="labelHeader"> Time </div>
@@ -44,11 +80,14 @@
 		<span> 8am-4pm<input type="checkbox" name="Time" value="8am-4pm" id="day" checked="true"> <br> </span>
 		 <span> 4pm-12am<input type="checkbox" name="Time" value="4pm-12am" id="evening" checked="true"> <br> </span>
 
-		<div class="labelHeader"> Home-Radius (A) </div>
-		<div class="slider"></div> 
+		<div class="labelHeader"> Home Radius </div>
+		<div class="slider" id="homeSlider"></div> 
+		<div id="homeVal"> 5 miles</div>
 
-		<div class="labelHeader"> Work Radius (B) </div>
-		<div class="slider"></div>
+		<div class="labelHeader"> Work Radius </div>
+		<div class="slider" id="workSlider"></div>
+				<div id="workVal"> 5 miles</div>
+
 
 
 	</div>
