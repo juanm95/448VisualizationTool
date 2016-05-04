@@ -26,6 +26,12 @@
 	slide: function(event, ui){
 		var elem = document.getElementById("homeVal");
 		elem.textContent = ui.value + " miles";
+		var pixels = ui.value *12;
+		console.log(pixels);
+		markerData[0].r = pixels;
+
+		updateMarkers()
+    	updateDataPoints(globalData, filters)
 	}
 	});});
 
@@ -36,7 +42,12 @@
 	slide: function(event, ui){
 		var elem = document.getElementById("workVal");
 		elem.textContent = ui.value + " miles";
+		var pixels = ui.value *12;
+		markerData[1].r = pixels;
+	  	updateMarkers()
+    	updateDataPoints(globalData, filters)
 	}
+
 
 	});});
 
