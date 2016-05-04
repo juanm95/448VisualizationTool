@@ -19,13 +19,26 @@
 	<script> 
 
 
-	$(function() {$( ".slider" ).slider({
-
+	$(function() {$( "#homeSlider" ).slider({
+		max:10,
+		min:0,
+		value:5,
 	slide: function(event, ui){
-				alert("yo");
-			}
+		var elem = document.getElementById("homeVal");
+		elem.textContent = ui.value + " miles";
+	}
+	});});
 
-		});});
+	$(function() {$( "#workSlider" ).slider({
+		max:10,
+		min:0,
+		value:5,
+	slide: function(event, ui){
+		var elem = document.getElementById("workVal");
+		elem.textContent = ui.value + " miles";
+	}
+
+	});});
 
 	</script>
 
@@ -59,11 +72,11 @@
 
 		<div class="labelHeader"> Home-Radius (A) </div>
 		<div class="slider" id="homeSlider"></div> 
-		<div class="sliderVal"> current value </div>
+		<div id="homeVal"> 5 miles</div>
 
 		<div class="labelHeader"> Work Radius (B) </div>
 		<div class="slider" id="workSlider"></div>
-				<div class="sliderVal"> current value </div>
+				<div id="workVal"> 5 miles</div>
 
 
 
