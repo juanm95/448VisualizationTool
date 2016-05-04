@@ -10,13 +10,13 @@ var globalData;
 var markerData = [
     {
         "name": "home"
-        , "x": 212
-        , "y": 440
+        , "x": 259
+        , "y": 389
         , "r": 60
     }, {
         "name": "work"
-        , "x": 336
-        , "y": 350
+        , "x": 308
+        , "y": 344
         , "r": 60
     }
 ]

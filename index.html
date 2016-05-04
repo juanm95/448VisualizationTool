@@ -21,8 +21,10 @@
 
 	$(function() {$( "#homeSlider" ).slider({
 		max:20,
+		min:0,
+		value:10,
 		min:1,
-		value:8,
+		value:10,
 	slide: function(event, ui){
 		var elem = document.getElementById("homeVal");
 		elem.textContent = ui.value + " miles";
@@ -38,7 +40,8 @@
 	$(function() {$( "#workSlider" ).slider({
 		max:20,
 		min:0,
-		value:8,
+		value:10,
+		value:10,
 	slide: function(event, ui){
 		var elem = document.getElementById("workVal");
 		elem.textContent = ui.value + " miles";
@@ -52,9 +55,13 @@
 	});});
 
 	</script>
+	<div id="visHeader"> San Francisco Crime Incidents by Crime Type, Resolution, and Time </div>
+	<div id ="subHeader">(April 1-15, 2016)</div>
 
 <div id="parent">
+
 	<div id ="svg-col"> 
+
 	</div>
 	<div id="interaction">
 		<div class="labelHeader"> Crime Type </div>
@@ -80,13 +87,13 @@
 		<span> 8am-4pm<input type="checkbox" name="Time" value="8am-4pm" id="day" checked="true"> <br> </span>
 		 <span> 4pm-12am<input type="checkbox" name="Time" value="4pm-12am" id="evening" checked="true"> <br> </span>
 
-		<div class="labelHeader"> Home Radius </div>
+		<div class="labelHeader"> Home Radius (H) </div>
 		<div class="slider" id="homeSlider"></div> 
-		<div id="homeVal"> 5 miles</div>
+		<div id="homeVal">10 miles</div>
 
-		<div class="labelHeader"> Work Radius </div>
+		<div class="labelHeader"> Work Radius (W) </div>
 		<div class="slider" id="workSlider"></div>
-				<div id="workVal"> 5 miles</div>
+				<div id="workVal">10 miles</div>
 
 
 
