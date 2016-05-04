@@ -106,6 +106,8 @@ function updateMarkers() {
     markers.exit().remove()
     var newMarkers = markers.enter().append("g")
     
+    newMarkers.call(dragMarker)
+    
     newMarkers.attr("transform", function (d) {
         return "translate(" + d.x + ", " + d.y + ")"
     })
@@ -130,7 +132,6 @@ function updateMarkers() {
         .attr("fill-opacity", "0")
         .attr("stroke-width", "3")
         .attr("stroke", "rgb(0, 0, 0)")
-        .call(dragMarker)
 
     markers.attr("transform", function (d) {
         return "translate(" + d.x + ", " + d.y + ")"
@@ -225,10 +226,15 @@ function updateDataPoints(data, filters) {
 }
 /************** INTERACTIONS ***********************/
 function dragMove(d) {
+    d3.event.sourceEvent.stopPropagation();
     var x = d3.event.x
         , y = d3.event.y;
-    d.x = x
-    d.y = y
+    d.x += d3.event.dx;
+    d.y += d3.event.dy;
+    console.log(d3.event.dx);
+//    d.x = x
+//    d.y = y
+//    console.log(d3.mouse(window.svg[0]))
     updateMarkers()
     updateDataPoints(globalData, filters)
 }
@@ -373,11 +379,7 @@ function click() {
         return
     }
     //extract the click location
-    var point = d3.mouse(this);
-    var p = {
-        x: point[0]
-        , y: point[1]
-    };
+
     //append a new point
     svg.append("circle")
         .attr("cx", p.x)
