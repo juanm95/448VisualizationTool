@@ -21,8 +21,13 @@
 
 	$(function() {$( "#homeSlider" ).slider({
 		max:20,
+<<<<<<< HEAD
 		min:0,
 		value:10,
+=======
+		min:1,
+		value:8,
+>>>>>>> origin/master
 	slide: function(event, ui){
 		var elem = document.getElementById("homeVal");
 		elem.textContent = ui.value + " miles";
@@ -38,7 +43,11 @@
 	$(function() {$( "#workSlider" ).slider({
 		max:20,
 		min:0,
+<<<<<<< HEAD
 		value:10,
+=======
+		value:8,
+>>>>>>> origin/master
 	slide: function(event, ui){
 		var elem = document.getElementById("workVal");
 		elem.textContent = ui.value + " miles";
@@ -55,7 +64,6 @@
 
 <div id="parent">
 	<div id ="svg-col"> 
-		<h2> Map </h2> 
 	</div>
 	<div id="interaction">
 		<div class="labelHeader"> Crime Type </div>
@@ -81,11 +89,11 @@
 		<span> 8am-4pm<input type="checkbox" name="Time" value="8am-4pm" id="day" checked="true"> <br> </span>
 		 <span> 4pm-12am<input type="checkbox" name="Time" value="4pm-12am" id="evening" checked="true"> <br> </span>
 
-		<div class="labelHeader"> Home-Radius (A) </div>
+		<div class="labelHeader"> Home Radius </div>
 		<div class="slider" id="homeSlider"></div> 
 		<div id="homeVal">10 miles</div>
 
-		<div class="labelHeader"> Work Radius (B) </div>
+		<div class="labelHeader"> Work Radius </div>
 		<div class="slider" id="workSlider"></div>
 				<div id="workVal">10 miles</div>
 
