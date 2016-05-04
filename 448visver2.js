@@ -4,7 +4,8 @@ var filters = new Set();
 var width = 750
     , height = width;
 var MARKER_SIZE = 20;
-var CIRCLE_RADIUS = 5;
+var CIRCLE_RADIUS = 2;
+var CIRCLE_STROKE_WIDTH = "1px"
 var globalData;
 var markerData = [
     {
@@ -211,7 +212,7 @@ function updateDataPoints(data, filters) {
                 return "#f1c40f";
             }
         })
-        .attr("stroke-width", "2px")
+        .attr("stroke-width", CIRCLE_STROKE_WIDTH)
 
     .attr("cx", function (d) {
             return projection(d.Location)[0];
