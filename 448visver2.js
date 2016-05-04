@@ -193,6 +193,25 @@ function updateDataPoints(data, filters) {
     circles.enter()
         .append("circle")
         .attr("class", "dataPoint")
+        .attr("fill", function (d) {
+            if (dataIsViolent(d)){
+                return  "#e74c3c";
+            }
+            else{
+                return "#3498db";
+            }
+
+        })
+        .attr("stroke", function (d) {
+            if (dataIsResolved(d)) {
+                return  "black";
+            }
+            else{
+                return "#f1c40f";
+            }
+        })
+      .attr("stroke-width", "2px")
+
         .attr("cx", function (d) {
             return projection(d.Location)[0];
         })
@@ -252,12 +271,12 @@ function dataIsWithinTIme(d) {
         }
     }
     if (filters.has("day")) {
-        if (8<=hour<=15){
+        if (8<=hour && hour<=15){
             return true;
         }
      }
     if (filters.has("evening")) {
-         if (16<=hour<=23){
+         if (16<=hour && hour<=23){
             return true;
         }
     }

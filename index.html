@@ -7,6 +7,8 @@
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   <!-- end of jquery -->
+  <script src="slider.js"></script>
+
 
 </head>
 
@@ -14,7 +16,18 @@
 	<!--d3 -->
 	<script src="https://d3js.org/d3.v3.min.js"></script>
 	<!--jquery slider -->
-	<script> $(function() {$( ".slider" ).slider();});</script>
+	<script> 
+
+
+	$(function() {$( ".slider" ).slider({
+
+	slide: function(event, ui){
+				alert("yo");
+			}
+
+		});});
+
+	</script>
 
 <div id="parent">
 	<div id ="svg-col"> 
@@ -35,7 +48,7 @@
 		 	<svg height="25" width="25"> <circle cx="11" cy="14" r="10" stroke="black" stroke-width="2" fill="white" /></svg>
 		 	Resolved<input type="checkbox" name="Resolution" value="Resolved" id="resolved" checked="true"> <br> </span>
 		<span> 
-			<svg height="25" width="25"> <circle cx="11" cy="14" r="10" stroke="black" stroke-width="2" stroke-dasharray="5,5" fill="white" border-style="dotted" /></svg>
+			<svg height="25" width="25"> <circle cx="11" cy="14" r="10" stroke="#f1c40f" stroke-width="2" fill="white" /></svg>
 			Not Resolved<input type="checkbox" name="Resolution" value="Not Resolved" id="notresolved" checked="true" checked="true"> <br> </span>
 
 		<div class="labelHeader"> Time </div>
@@ -45,10 +58,13 @@
 		 <span> 4pm-12am<input type="checkbox" name="Time" value="4pm-12am" id="evening" checked="true"> <br> </span>
 
 		<div class="labelHeader"> Home-Radius (A) </div>
-		<div class="slider"></div> 
+		<div class="slider" id="homeSlider"></div> 
+		<div class="sliderVal"> current value </div>
 
 		<div class="labelHeader"> Work Radius (B) </div>
-		<div class="slider"></div>
+		<div class="slider" id="workSlider"></div>
+				<div class="sliderVal"> current value </div>
+
 
 
 	</div>

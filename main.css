@@ -34,21 +34,23 @@ span{
 	font-size: 20px;
 }
 
-.violent{
-	fill: #e74c3c;
-
+.slider label {
+    position: absolute;
+    width: 20px;
+    margin-left: -10px;
+    text-align: center;
+    margin-top: 20px;
+    color: black;
 }
 
-.nonviolent{
-	fill: #3498db;
+/* below is not necessary, just for style */
+.slider {
+    width: 50%;
+    margin: 2em auto;
 }
-.resolved{
 
-}
-.notresolved{
-	stroke-dasharray: 5,5;
-	  border: 3px solid black;
-
-
+.sliderVal{
+	text-align: center;
+	margin-top: -30px;
 }
 
