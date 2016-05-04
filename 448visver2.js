@@ -10,7 +10,6 @@ var globalData;
 var markerData = [
     {
         "name": "home"
-<<<<<<< HEAD
         , "x": 300
         , "y": 200
         , "r": 120
@@ -20,7 +19,6 @@ var markerData = [
         , "x": 200
         , "y": 300
         , "r": 120
-=======
         , "x": 212
         , "y": 440
         , "r": 60
@@ -29,7 +27,6 @@ var markerData = [
         , "x": 336
         , "y": 350
         , "r": 60
->>>>>>> origin/master
     }
 ]
 
