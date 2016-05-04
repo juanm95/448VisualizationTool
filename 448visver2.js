@@ -12,14 +12,6 @@ var markerData = [
         , "y": 200
         , "r": 50
     }
-
-
-
-
-
-
-
-    
     , {
         "name": "work"
         , "x": 200
