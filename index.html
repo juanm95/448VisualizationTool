@@ -20,9 +20,9 @@
 
 
 	$(function() {$( "#homeSlider" ).slider({
-		max:10,
+		max:20,
 		min:0,
-		value:5,
+		value:10,
 	slide: function(event, ui){
 		var elem = document.getElementById("homeVal");
 		elem.textContent = ui.value + " miles";
@@ -36,9 +36,9 @@
 	});});
 
 	$(function() {$( "#workSlider" ).slider({
-		max:10,
+		max:20,
 		min:0,
-		value:5,
+		value:10,
 	slide: function(event, ui){
 		var elem = document.getElementById("workVal");
 		elem.textContent = ui.value + " miles";
@@ -83,11 +83,11 @@
 
 		<div class="labelHeader"> Home-Radius (A) </div>
 		<div class="slider" id="homeSlider"></div> 
-		<div id="homeVal"> 5 miles</div>
+		<div id="homeVal">10 miles</div>
 
 		<div class="labelHeader"> Work Radius (B) </div>
 		<div class="slider" id="workSlider"></div>
-				<div id="workVal"> 5 miles</div>
+				<div id="workVal">10 miles</div>
 
 
 
